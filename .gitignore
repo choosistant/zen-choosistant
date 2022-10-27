@@ -177,3 +177,4 @@ mlruns/
 
 # Data
 data/*
+.aks-kubeconfig.yaml

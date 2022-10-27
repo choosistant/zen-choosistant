@@ -55,6 +55,17 @@ azure-terraform-destroy:
 		zenika/terraform-azure-cli:latest \
 		bash /workspace/scripts/destroy.sh
 
+azure-terraform-kubeconfig:
+	@docker container run \
+		-it \
+		--rm \
+		--mount type=bind,source="$(shell pwd)/deploy/terraform/azure",target=/workspace \
+		--user $(shell id -u) \
+		-v ${HOME}/.azure:/.azure \
+		zenika/terraform-azure-cli:latest \
+		terraform output kube_config \
+		| grep -v "EOT"
+
 dev-init:
 	@poetry env use python
 	@poetry install

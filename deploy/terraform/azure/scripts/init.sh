@@ -39,6 +39,9 @@ az keyvault secret set \
     --name $TF_KEY_NAME \
     --value $ACCOUNT_KEY
 
+echo "Registering Microsoft.ContainerService..."
+az provider register -n Microsoft.ContainerService --wait
+
 export ARM_ACCESS_KEY=$(az keyvault secret show --name $TF_KEY_NAME --vault-name $TF_KEY_VAULT_NAME --query value -o tsv)
 
 echo "Initializing Terraform..."
