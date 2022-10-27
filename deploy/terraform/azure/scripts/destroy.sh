@@ -7,8 +7,11 @@ DIR="${BASH_SOURCE%/*}"
 if [[ ! -d "$DIR" ]]; then DIR="$PWD"; fi
 source "$DIR/variables.sh"
 
-# Clean up
-echo "Deleting resource group $TF_RESOURCE_GROUP_NAME..."
+echo "Deleting all resources managed by Terraform..."
+terraform destroy
+
+# Clean up Terraform files
+echo "Deleting resource group for Terraform backend $TF_RESOURCE_GROUP_NAME..."
 az group delete --name $TF_RESOURCE_GROUP_NAME
 
 echo "Deleting key vault $TF_KEY_VAULT_NAME..."
