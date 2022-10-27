@@ -54,3 +54,11 @@ azure-terraform-destroy:
 		-v ${HOME}/.azure:/.azure \
 		zenika/terraform-azure-cli:latest \
 		bash /workspace/scripts/destroy.sh
+
+dev-init:
+	@poetry env use python
+	@poetry install
+	@poetry run pre-commit install
+
+dev-precommit:
+	poetry run pre-commit run --all-files
