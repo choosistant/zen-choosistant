@@ -55,7 +55,8 @@ azure-terraform-destroy:
 		zenika/terraform-azure-cli:latest \
 		bash /workspace/scripts/destroy.sh
 
-azure-terraform-kubeconfig:
+configure-kubectl:
+	echo "Fetching kubeconfig from AKS..."
 	@docker container run \
 		-it \
 		--rm \
@@ -64,7 +65,11 @@ azure-terraform-kubeconfig:
 		-v ${HOME}/.azure:/.azure \
 		zenika/terraform-azure-cli:latest \
 		terraform output kube_config \
-		| grep -v "EOT"
+		| grep -v "EOT" > .aks-kubeconfig.yaml
+	@echo "Setting config file to $(pwd)/.aks-kubeconfig.yaml..."
+	@export KUBECONFIG=$(pwd)/.aks-kubeconfig.yaml
+	@echo "Setting default namespace to choosistant..."
+	@kubectl config set-context --current --namespace=choosistant
 
 dev-init:
 	@poetry env use python

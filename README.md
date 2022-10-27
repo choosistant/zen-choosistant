@@ -28,11 +28,10 @@ Deploy Azure resources:
 make azure-terraform-apply
 ```
 
-Setup Kubeconfig
+Configure `kubectl`:
 
 ```bash
-make azure-terraform-kubeconfig > .aks-kubeconfig.yaml
-export KUBECONFIG=$(pwd)/.aks-kubeconfig.yaml
+make configure-kubectl
 ```
 
 Delete all Azure resources:
