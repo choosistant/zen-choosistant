@@ -41,4 +41,3 @@ module "blob-storage" {
   workload            = var.workload
   tags                = local.tags
 }
-
