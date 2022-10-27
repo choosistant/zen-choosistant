@@ -19,6 +19,7 @@ variable "environment" {
 variable "workload" {
   description = "The workload name e.g. choos."
   type        = string
+  default     = "choos"
 }
 
 variable "tags" {
