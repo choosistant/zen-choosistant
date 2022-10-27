@@ -12,6 +12,10 @@ terraform {
       source  = "hashicorp/kubernetes"
       version = "~>2.14.0"
     }
+    helm = {
+      source  = "hashicorp/helm"
+      version = "~>2.7.1"
+    }
   }
 
   backend "azurerm" {
@@ -55,4 +59,12 @@ module "aks" {
   environment         = var.environment
   workload            = var.workload
   tags                = local.tags
+}
+
+module "k8s-resources" {
+  source                     = "./modules/k8s-resources"
+  k8s_host                   = module.aks.host
+  k8s_client_certificate     = module.aks.client_certificate
+  k8s_client_key             = module.aks.client_key
+  k8s_cluster_ca_certificate = module.aks.cluster_ca_certificate
 }
