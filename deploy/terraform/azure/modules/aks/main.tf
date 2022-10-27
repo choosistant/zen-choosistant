@@ -3,7 +3,7 @@ locals {
 }
 
 resource "azurerm_kubernetes_cluster" "main" {
-  name                = "${var.location_code}-${var.environment}-${var.workload}-sc-01" # TODO: Change it k8s-01
+  name                = "${var.location_code}-${var.environment}-${var.workload}-aks-01"
   resource_group_name = var.resource_group_name
   location            = var.location
   dns_prefix          = "choosistant-k8s"
