@@ -65,9 +65,7 @@ configure-kubectl:
 		-v ${HOME}/.azure:/.azure \
 		zenika/terraform-azure-cli:latest \
 		terraform output kube_config \
-		| grep -v "EOT" > .aks-kubeconfig.yaml
-	@echo "Setting config file to $(pwd)/.aks-kubeconfig.yaml..."
-	@export KUBECONFIG=$(pwd)/.aks-kubeconfig.yaml
+		| grep -v "EOT" > ${HOME}/.kube/config
 	@echo "Setting default namespace to choosistant..."
 	@kubectl config set-context --current --namespace=choosistant
 
