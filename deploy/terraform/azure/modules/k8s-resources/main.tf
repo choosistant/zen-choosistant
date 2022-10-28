@@ -1,4 +1,3 @@
-
 provider "kubernetes" {
   host                   = var.k8s_host
   client_certificate     = base64decode(var.k8s_client_certificate)
@@ -22,22 +21,18 @@ resource "kubernetes_namespace" "main" {
   }
 }
 
-# # Create namespace for the cert-manager
-# resource "kubernetes_namespace" "cert_manager" {
-#   metadata {
-#     name = "cert-manager"
-#   }
-# }
+# Create namespace for the cert-manager
+resource "kubernetes_namespace" "cert_manager" {
+  metadata {
+    name = "cert-manager"
+  }
+}
 
-# resource "helm_release" "cert_manager" {
-#   name       = "cert-manager"
-#   repository = "https://charts.jetstack.io"
-#   chart      = "cert-manager"
-#   version    = "v1.10.0"
-#   namespace  = kubernetes_namespace.cert_manager.metadata.0.name
-
-#   set {
-#     name  = "installCRDs"
-#     value = "true"
-#   }
-# }
+resource "helm_release" "cert_manager" {
+  name       = "cert-manager"
+  namespace  = kubernetes_namespace.cert_manager.metadata.0.name
+  create_namespace = false
+  repository = "${path.module}/charts"
+  chart      = "cert-manager"
+  version    = "v1.10.0"
+}
