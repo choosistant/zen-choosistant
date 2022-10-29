@@ -94,3 +94,10 @@ module "cert-manager" {
     module.cert-manager-crds
   ]
 }
+
+module "letsencrypt-certs" {
+  source                 = "./modules/letsencrypt-certs"
+  cert_manager_namespace = module.cert-manager.namespace
+  cloudflare_api_token   = var.cloudflare_api_token
+  letsencrypt_email      = var.letsencrypt_email
+}
