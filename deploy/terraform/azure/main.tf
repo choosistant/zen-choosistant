@@ -88,8 +88,8 @@ module "cert-manager-crds" {
   ]
 }
 
-module "k8s-resources" {
-  source = "./modules/k8s-resources"
+module "cert-manager" {
+  source = "./modules/cert-manager"
   depends_on = [
     module.cert-manager-crds
   ]

@@ -1,9 +1,9 @@
-# Create the default namespace.
-resource "kubernetes_namespace" "main" {
-  metadata {
-    name = "choosistant"
-  }
-}
+# # Create the default namespace.
+# resource "kubernetes_namespace" "main" {
+#   metadata {
+#     name = "choosistant"
+#   }
+# }
 
 # Create namespace for the cert-manager
 resource "kubernetes_namespace" "cert_manager" {
