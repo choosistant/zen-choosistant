@@ -63,10 +63,34 @@ module "aks" {
   tags                = local.tags
 }
 
+# Configure the Kubernetes provider.
+provider "kubernetes" {
+  host                   = module.aks.host
+  client_certificate     = base64decode(module.aks.client_certificate)
+  client_key             = base64decode(module.aks.client_key)
+  cluster_ca_certificate = base64decode(module.aks.cluster_ca_certificate)
+}
+
+# Configure the Helm provider.
+provider "helm" {
+  kubernetes {
+    host                   = module.aks.host
+    client_certificate     = base64decode(module.aks.client_certificate)
+    client_key             = base64decode(module.aks.client_key)
+    cluster_ca_certificate = base64decode(module.aks.cluster_ca_certificate)
+  }
+}
+
+module "cert-manager-crds" {
+  source = "./modules/cert-manager-crds"
+  depends_on = [
+    module.aks
+  ]
+}
+
 module "k8s-resources" {
-  source                     = "./modules/k8s-resources"
-  k8s_host                   = module.aks.host
-  k8s_client_certificate     = module.aks.client_certificate
-  k8s_client_key             = module.aks.client_key
-  k8s_cluster_ca_certificate = module.aks.cluster_ca_certificate
+  source = "./modules/k8s-resources"
+  depends_on = [
+    module.cert-manager-crds
+  ]
 }
