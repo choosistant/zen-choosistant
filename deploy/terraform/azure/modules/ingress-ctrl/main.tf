@@ -1,3 +1,12 @@
+terraform {
+  required_providers {
+    cloudflare = {
+      source  = "cloudflare/cloudflare"
+      version = "~>3.26.0"
+    }
+  }
+}
+
 resource "kubernetes_namespace" "nginx" {
   metadata {
     name = "ingress-ctrl"
@@ -26,7 +35,22 @@ resource "helm_release" "nginx" {
 # to output the external IP address of the service.
 data "kubernetes_service" "nginx" {
   metadata {
-    name      = helm_release.nginx.name
+    name      = "${helm_release.nginx.name}-${helm_release.nginx.name}"
     namespace = helm_release.nginx.namespace
   }
+}
+
+data "cloudflare_zones" "main" {
+  filter {
+    name = var.domain_name
+  }
+}
+
+# Add a DNS record which points to the external IP of the nginx service.
+resource "cloudflare_record" "wildcard_record" {
+  zone_id = data.cloudflare_zones.main.zones.0.id
+  name    = "*.${var.domain_name}"
+  type    = "A"
+  value   = data.kubernetes_service.nginx.status.0.load_balancer.0.ingress.0.ip
+  proxied = false
 }

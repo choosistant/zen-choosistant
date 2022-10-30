@@ -49,3 +49,8 @@ variable "zenml_ingress_host" {
   type        = string
   description = "The ingress host for the ZenML server."
 }
+
+variable "ingress_controller_domain_name" {
+  type        = string
+  description = "The domain name for the ingress controller."
+}
