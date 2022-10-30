@@ -86,6 +86,12 @@ resource "kubernetes_manifest" "letsencrypt_wildcard_cert_sheikhomar_com" {
     metadata = {
       name      = "letsencrypt-wildcard-cert-sheikhomar.com"
       namespace = var.cert_manager_namespace
+      annotations = {
+        "reflector.v1.k8s.emberstack.com/reflection-allowed"            = "true"
+        "reflector.v1.k8s.emberstack.com/reflection-allowed-namespaces" = ""
+        "reflector.v1.k8s.emberstack.com/reflection-auto-enabled"       = "true"
+        "reflector.v1.k8s.emberstack.com/reflection-auto-namespaces"    = ""
+      }
     }
     spec = {
       secretName = local.sheikhomar_com_wildcard_cert_secret_name
