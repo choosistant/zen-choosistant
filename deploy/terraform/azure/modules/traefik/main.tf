@@ -83,3 +83,21 @@ resource "kubernetes_manifest" "wildcard_cert_sheikhomar_com" {
     }
   }
 }
+
+# Create a default TLSStore which contains the wildcard certificate.
+resource "kubernetes_manifest" "tls_store_sheikhomar_com" {
+  manifest = {
+    apiVersion = "traefik.containo.us/v1alpha1"
+    kind       = "TLSStore"
+    metadata   = {
+      # Traefik currently only uses the TLS Store named "default".
+      name      = "default"
+      namespace = helm_release.traefik.namespace
+    }
+    spec       = {
+      defaultCertificate = {
+        secretName = local.sheikhomar_com_wildcard_cert_secret_name
+      }
+    }
+  }
+}
