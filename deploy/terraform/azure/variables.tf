@@ -38,3 +38,9 @@ variable "letsencrypt_email" {
   description = "Email address that Let's Encrypt will use to send notifications about expiring certificates and account-related issues to."
   sensitive   = true
 }
+
+variable "zenml_default_password" {
+  type        = string
+  description = "The default password for the ZenML server."
+  sensitive   = true
+}

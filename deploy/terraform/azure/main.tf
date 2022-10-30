@@ -116,3 +116,11 @@ module "traefik" {
   source              = "./modules/traefik"
   cluster_issuer_name = module.letsencrypt-certs.letsencrypt_issuer_name_production
 }
+
+module "zenml" {
+  source           = "./modules/zenml-server"
+  default_password = var.zenml_default_password
+  depends_on = [
+    module.traefik
+  ]
+}
