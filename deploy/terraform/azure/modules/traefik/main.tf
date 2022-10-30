@@ -7,6 +7,11 @@ terraform {
   }
 }
 
+locals {
+  sheikhomar_com_wildcard_cert_name        = "sheikhomar.com-wildcard-cert"
+  sheikhomar_com_wildcard_cert_secret_name = "sheikhomar.com-wildcard-cert-secret"
+}
+
 resource "kubernetes_namespace" "traefik" {
   metadata {
     name = "traefik"
@@ -55,4 +60,26 @@ resource "cloudflare_record" "traefik" {
   type    = "A"
   value   = data.kubernetes_service.traefik.status.0.load_balancer.0.ingress.0.ip
   proxied = false
+}
+
+resource "kubernetes_manifest" "wildcard_cert_sheikhomar_com" {
+  manifest = {
+    apiVersion = "cert-manager.io/v1"
+    kind       = "Certificate"
+    metadata = {
+      name      = local.sheikhomar_com_wildcard_cert_name
+      namespace = helm_release.traefik.namespace
+    }
+    spec = {
+      secretName = local.sheikhomar_com_wildcard_cert_secret_name
+      issuerRef = {
+        name = var.cluster_issuer_name
+        kind = "ClusterIssuer"
+      }
+      dnsNames = [
+        "sheikhomar.com",
+        "*.sheikhomar.com"
+      ]
+    }
+  }
 }

@@ -99,26 +99,11 @@ module "cert-manager" {
   ]
 }
 
-# We use Reflector to copy secrets and configmaps to other namespaces.
-# This is useful, for example, for copying certificates created in one
-# namespace to other namespaces. We simply need to annotate the source
-# secret or configmap with the following:
-#   reflector.v1.k8s.emberstack.com/reflection-allowed: "true"
-# To limit the reflection to specific namespaces, we can also add:
-#   reflector.v1.k8s.emberstack.com/reflection-allowed-namespaces: "ns1,ns2,namespace-[0-9]*"
-module "reflector" {
-  source    = "./modules/reflector"
-  namespace = module.cert-manager.namespace
-}
-
 module "letsencrypt-certs" {
   source                 = "./modules/letsencrypt-certs"
   cert_manager_namespace = module.cert-manager.namespace
   cloudflare_api_token   = var.cloudflare_api_token
   letsencrypt_email      = var.letsencrypt_email
-  depends_on = [
-    module.reflector
-  ]
 }
 
 # Configure the Cloudflare provider.
@@ -128,9 +113,6 @@ provider "cloudflare" {
 
 # We use Traefik as our Ingress Controller.
 module "traefik" {
-  source = "./modules/traefik"
-  depends_on = [
-    module.cert-manager,
-    module.letsencrypt-certs
-  ]
+  source              = "./modules/traefik"
+  cluster_issuer_name = module.letsencrypt-certs.letsencrypt_issuer_name_production
 }

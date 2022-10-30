@@ -78,31 +78,3 @@ resource "kubernetes_manifest" "letsencrypt_production" {
     }
   }
 }
-
-resource "kubernetes_manifest" "letsencrypt_wildcard_cert_sheikhomar_com" {
-  manifest = {
-    apiVersion = "cert-manager.io/v1"
-    kind       = "Certificate"
-    metadata = {
-      name      = "letsencrypt-wildcard-cert-sheikhomar.com"
-      namespace = var.cert_manager_namespace
-      annotations = {
-        "reflector.v1.k8s.emberstack.com/reflection-allowed"            = "true"
-        "reflector.v1.k8s.emberstack.com/reflection-allowed-namespaces" = ""
-        "reflector.v1.k8s.emberstack.com/reflection-auto-enabled"       = "true"
-        "reflector.v1.k8s.emberstack.com/reflection-auto-namespaces"    = ""
-      }
-    }
-    spec = {
-      secretName = local.sheikhomar_com_wildcard_cert_secret_name
-      issuerRef = {
-        name = local.letsencrypt_issuer_name_production
-        kind = "ClusterIssuer"
-      }
-      dnsNames = [
-        "sheikhomar.com",
-        "*.sheikhomar.com"
-      ]
-    }
-  }
-}
