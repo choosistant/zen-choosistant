@@ -111,17 +111,18 @@ provider "cloudflare" {
   api_token = var.cloudflare_api_token
 }
 
-# We use Traefik as our Ingress Controller.
-module "traefik" {
-  source              = "./modules/traefik"
-  cluster_issuer_name = module.letsencrypt-certs.letsencrypt_issuer_name_production
-}
-
-module "zenml" {
-  source           = "./modules/zenml-server"
-  default_password = var.zenml_default_password
-  ingress_host     = var.zenml_ingress_host
+module "ingress-ctrl" {
+  source = "./modules/ingress-ctrl"
   depends_on = [
-    module.traefik
+    module.letsencrypt-certs
   ]
 }
+
+# module "zenml" {
+#   source           = "./modules/zenml-server"
+#   default_password = var.zenml_default_password
+#   ingress_host     = var.zenml_ingress_host
+#   depends_on = [
+#     module.traefik
+#   ]
+# }
