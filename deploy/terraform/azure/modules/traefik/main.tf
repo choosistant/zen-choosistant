@@ -89,12 +89,12 @@ resource "kubernetes_manifest" "tls_store_sheikhomar_com" {
   manifest = {
     apiVersion = "traefik.containo.us/v1alpha1"
     kind       = "TLSStore"
-    metadata   = {
+    metadata = {
       # Traefik currently only uses the TLS Store named "default".
       name      = "default"
       namespace = helm_release.traefik.namespace
     }
-    spec       = {
+    spec = {
       defaultCertificate = {
         secretName = local.sheikhomar_com_wildcard_cert_secret_name
       }
