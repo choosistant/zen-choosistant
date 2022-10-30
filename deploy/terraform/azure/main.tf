@@ -120,6 +120,7 @@ module "traefik" {
 module "zenml" {
   source           = "./modules/zenml-server"
   default_password = var.zenml_default_password
+  ingress_host     = var.zenml_ingress_host
   depends_on = [
     module.traefik
   ]

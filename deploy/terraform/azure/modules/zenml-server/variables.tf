@@ -3,3 +3,8 @@ variable "default_password" {
   type        = string
   sensitive   = true
 }
+
+variable "ingress_host" {
+  description = "The ingress host for the ZenML server."
+  type        = string
+}

@@ -1,3 +1,7 @@
+locals {
+  rootUrlPath = "/zenml"
+}
+
 resource "kubernetes_namespace" "zenml" {
   metadata {
     name = "zenml"
@@ -13,7 +17,7 @@ resource "helm_release" "zenml" {
 
   set {
     name  = "zenml.rootUrlPath"
-    value = "/zenml"
+    value = local.rootUrlPath
   }
 
   set {
@@ -33,6 +37,21 @@ resource "helm_release" "zenml" {
 
   set {
     name  = "ingress.className"
-    value = "" # Use the default ingress class
+    value = "traefik"
+  }
+
+  set {
+    name  = "ingress.host"
+    value = var.ingress_host
+  }
+
+  set {
+    name  = "ingress.path"
+    value = local.rootUrlPath
+  }
+
+  set {
+    name  = "ingress.annotations.traefik\\.ingress\\.kubernetes\\.io/router\\.entrypoints"
+    value = "websecure"
   }
 }
