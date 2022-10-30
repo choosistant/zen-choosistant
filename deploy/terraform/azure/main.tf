@@ -18,6 +18,10 @@ terraform {
       source  = "hashicorp/helm"
       version = "~>2.7.1"
     }
+    cloudflare = {
+      source  = "cloudflare/cloudflare"
+      version = "~>3.26.0"
+    }
   }
 
   backend "azurerm" {
@@ -100,4 +104,18 @@ module "letsencrypt-certs" {
   cert_manager_namespace = module.cert-manager.namespace
   cloudflare_api_token   = var.cloudflare_api_token
   letsencrypt_email      = var.letsencrypt_email
+}
+
+# Configure the Cloudflare provider.
+provider "cloudflare" {
+  api_token = var.cloudflare_api_token
+}
+
+# We use Traefik as our Ingress Controller.
+module "traefik" {
+  source = "./modules/traefik"
+  depends_on = [
+    module.cert-manager,
+    module.letsencrypt-certs
+  ]
 }
