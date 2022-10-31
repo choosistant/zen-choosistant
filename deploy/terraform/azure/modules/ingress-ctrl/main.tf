@@ -58,7 +58,7 @@ resource "helm_release" "nginx" {
   }
 
   set {
-    name = "controller.extraArgs.default-ssl-certificate"
+    name  = "controller.extraArgs.default-ssl-certificate"
     value = "${kubernetes_namespace.nginx.metadata.0.name}/${local.wildcard_domain_cert_secret_name}"
   }
 }
