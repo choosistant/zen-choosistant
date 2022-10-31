@@ -28,6 +28,12 @@ Deploy Azure resources:
 make azure-terraform-apply
 ```
 
+Configure `kubectl`:
+
+```bash
+make configure-kubectl
+```
+
 Delete all Azure resources:
 
 ```bash
