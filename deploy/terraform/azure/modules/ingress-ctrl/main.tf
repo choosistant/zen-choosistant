@@ -7,9 +7,36 @@ terraform {
   }
 }
 
+locals {
+  wildcard_domain_cert_name        = "${var.domain_name}-wildcard-cert"
+  wildcard_domain_cert_secret_name = "${var.domain_name}-wildcard-cert-secret"
+}
+
 resource "kubernetes_namespace" "nginx" {
   metadata {
     name = "ingress-ctrl"
+  }
+}
+
+resource "kubernetes_manifest" "wildcard_cert" {
+  manifest = {
+    apiVersion = "cert-manager.io/v1"
+    kind       = "Certificate"
+    metadata = {
+      name      = local.wildcard_domain_cert_name
+      namespace = kubernetes_namespace.nginx.metadata.0.name
+    }
+    spec = {
+      secretName = local.wildcard_domain_cert_secret_name
+      issuerRef = {
+        name = var.cluster_issuer_name
+        kind = "ClusterIssuer"
+      }
+      dnsNames = [
+        var.domain_name,
+        "*.${var.domain_name}"
+      ]
+    }
   }
 }
 
@@ -28,6 +55,11 @@ resource "helm_release" "nginx" {
   set {
     name  = "controller.service.annotations.service\\.beta\\.kubernetes\\.io/azure-load-balancer-health-probe-request-path"
     value = "/healthz"
+  }
+
+  set {
+    name = "controller.extraArgs.default-ssl-certificate"
+    value = "${kubernetes_namespace.nginx.metadata.0.name}/${local.wildcard_domain_cert_secret_name}"
   }
 }
 
