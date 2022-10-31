@@ -114,7 +114,7 @@ provider "cloudflare" {
 module "ingress-ctrl" {
   source      = "./modules/ingress-ctrl"
   domain_name = var.ingress_controller_domain_name
-  cluster_issuer_name = module.letsencrypt-certs.letsencrypt_issuer_name_production
+  cluster_issuer_name = module.letsencrypt-certs.letsencrypt_issuer_name_staging
 }
 
 # module "zenml" {
