@@ -1,7 +1,3 @@
-locals {
-  rootUrlPath = "/zenml"
-}
-
 resource "kubernetes_namespace" "zenml" {
   metadata {
     name = "zenml"
@@ -16,8 +12,23 @@ resource "helm_release" "zenml" {
   chart            = "zenml"
 
   set {
+    name  = "ingress.className"
+    value = "nginx"
+  }
+
+  set {
+    name  = "ingress.host"
+    value = var.ingress_host
+  }
+
+  set {
+    name  = "ingress.path"
+    value = "/"
+  }
+
+  set {
     name  = "zenml.rootUrlPath"
-    value = local.rootUrlPath
+    value = "/"
   }
 
   set {
@@ -33,25 +44,5 @@ resource "helm_release" "zenml" {
   set {
     name  = "zenml.defaultPassword"
     value = var.default_password
-  }
-
-  set {
-    name  = "ingress.className"
-    value = "traefik"
-  }
-
-  set {
-    name  = "ingress.host"
-    value = var.ingress_host
-  }
-
-  set {
-    name  = "ingress.path"
-    value = local.rootUrlPath
-  }
-
-  set {
-    name  = "ingress.annotations.traefik\\.ingress\\.kubernetes\\.io/router\\.entrypoints"
-    value = "websecure"
   }
 }

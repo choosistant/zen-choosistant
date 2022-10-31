@@ -112,16 +112,16 @@ provider "cloudflare" {
 }
 
 module "ingress-ctrl" {
-  source      = "./modules/ingress-ctrl"
-  domain_name = var.ingress_controller_domain_name
+  source              = "./modules/ingress-ctrl"
+  domain_name         = var.ingress_controller_domain_name
   cluster_issuer_name = module.letsencrypt-certs.letsencrypt_issuer_name_staging
 }
 
-# module "zenml" {
-#   source           = "./modules/zenml-server"
-#   default_password = var.zenml_default_password
-#   ingress_host     = var.zenml_ingress_host
-#   depends_on = [
-#     module.traefik
-#   ]
-# }
+module "zenml" {
+  source           = "./modules/zenml-server"
+  default_password = var.zenml_default_password
+  ingress_host     = var.zenml_ingress_host
+  depends_on = [
+    module.ingress-ctrl
+  ]
+}
