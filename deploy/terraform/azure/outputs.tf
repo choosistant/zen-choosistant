@@ -22,3 +22,12 @@ output "zenml_stack_storage_container_name" {
 output "zenml_stack_storage_blob_name" {
   value = module.zenml-stack.storage_blob_name
 }
+
+output "zenml_stack_storage_account_access_key_secret_name" {
+  value = module.zenml-stack.storage_account_access_key_secret_name
+}
+
+output "zenml_stack_storage_account_access_key" {
+  value     = module.zenml-stack.storage_account_access_key
+  sensitive = true
+}

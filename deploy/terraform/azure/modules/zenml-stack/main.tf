@@ -34,4 +34,35 @@ resource "azurerm_key_vault" "main" {
   sku_name            = "standard"
   tenant_id           = data.azurerm_client_config.current.tenant_id
   tags                = local.tags
+
+  access_policy {
+    tenant_id = data.azurerm_client_config.current.tenant_id
+    object_id = data.azurerm_client_config.current.object_id
+
+    key_permissions = [
+      "Create",
+      "Get",
+    ]
+
+    secret_permissions = [
+      "Set",
+      "Get",
+      "Delete",
+      "Purge",
+      "Recover"
+    ]
+  }
+}
+
+# Retrieve account key from storage account
+data "azurerm_storage_account" "main" {
+  name                = azurerm_storage_account.main.name
+  resource_group_name = azurerm_storage_account.main.resource_group_name
+}
+
+# Create a secret containing the account key in the key vault
+resource "azurerm_key_vault_secret" "storage_account_key" {
+  name         = "storage-account-key"
+  value        = data.azurerm_storage_account.main.primary_access_key
+  key_vault_id = azurerm_key_vault.main.id
 }
