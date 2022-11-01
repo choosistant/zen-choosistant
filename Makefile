@@ -106,6 +106,7 @@ zenml-register-secrets-manager:
 	$(eval KEY_VAULT_NAME := $(file < /tmp/keyvault_name))
 	@echo "Using key vault ${KEY_VAULT_NAME}"
 	@poetry run zenml secrets-manager register ${ZENML_SECRETS_MANAGER_NAME} --key_vault_name=${KEY_VAULT_NAME} -f azure
+	@poetry run zenml stack update ${ZENML_STACK_NAME} -x ${ZENML_SECRETS_MANAGER_NAME}
 
 dev-init:
 	@poetry env use python
