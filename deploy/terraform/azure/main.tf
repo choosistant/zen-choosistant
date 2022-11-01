@@ -114,3 +114,13 @@ module "zenml" {
     module.ingress-ctrl
   ]
 }
+
+module "zenml-stack" {
+  source              = "./modules/zenml-stack"
+  resource_group_name = azurerm_resource_group.main.name
+  location_code       = var.location_code
+  location            = var.location
+  environment         = var.environment
+  workload            = var.workload
+  tags                = local.tags
+}
