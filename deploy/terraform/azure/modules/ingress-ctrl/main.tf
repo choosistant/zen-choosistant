@@ -33,7 +33,6 @@ resource "kubernetes_manifest" "wildcard_cert" {
         kind = "ClusterIssuer"
       }
       dnsNames = [
-        var.domain_name,
         "*.${var.domain_name}"
       ]
     }
