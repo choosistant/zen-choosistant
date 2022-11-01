@@ -70,6 +70,43 @@ configure-kubectl:
 	@echo "Setting default namespace to choosistant..."
 	@kubectl config set-context --current --namespace=choosistant
 
+ZENML_STACK_NAME=choosistant-azure-stack
+ZENML_SECRETS_MANAGER_NAME=choosistant-azure-secret-manager
+
+zenml-init:
+	@echo "Configure remote ZenML server..."
+	@poetry run zenml connect --url https://zenml.sheikhomar.com/
+	@poetry run zenml init
+
+zenml-install-integrations:
+	@echo "Installing ZenML integrations"
+	@poetry run zenml integration install azure
+
+zenml-create-stack:
+	@echo "Creating ZenML stack..."
+	$(eval CURRENT_STACK_NAME := $(shell poetry run zenml stack get | grep "active stack is:" | cut -d "'" -f 2))
+	if [ "${CURRENT_STACK_NAME}" = "${ZENML_STACK_NAME}" ]; then \
+		echo "Stack already exists"; \
+	else \
+		poetry run zenml stack copy default ${ZENML_STACK_NAME}; \
+	fi
+	@poetry run zenml stack set ${ZENML_STACK_NAME}
+
+zenml-register-secrets-manager:
+	@echo "Fetching key vault name from Azure..."
+	@docker container run \
+		-it \
+		--rm \
+		--mount type=bind,source="$(shell pwd)/deploy/terraform/azure",target=/workspace \
+		--user $(shell id -u) \
+		-v ${HOME}/.azure:/.azure \
+		zenika/terraform-azure-cli:latest \
+		terraform output --raw zenml_stack_key_vault_name \
+		> /tmp/keyvault_name
+	$(eval KEY_VAULT_NAME := $(file < /tmp/keyvault_name))
+	@echo "Using key vault ${KEY_VAULT_NAME}"
+	@poetry run zenml secrets-manager register ${ZENML_SECRETS_MANAGER_NAME} --key_vault_name=${KEY_VAULT_NAME} -f azure
+
 dev-init:
 	@poetry env use python
 	@poetry install
