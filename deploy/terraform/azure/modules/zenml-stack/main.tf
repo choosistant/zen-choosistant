@@ -49,7 +49,8 @@ resource "azurerm_key_vault" "main" {
       "Get",
       "Delete",
       "Purge",
-      "Recover"
+      "Recover",
+      "List",
     ]
   }
 }
