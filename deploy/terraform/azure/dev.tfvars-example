@@ -1,0 +1,15 @@
+location_code = "euw"
+location      = "westeurope"
+environment   = "dev"
+workload      = "choos"
+
+tags = {
+  environment = "dev"
+  deployed_by = "terraform"
+}
+
+cloudflare_api_token           = "<API_TOKEN>"
+letsencrypt_email              = "<EMAIL>"
+ingress_controller_domain_name = "<DOMAIN_NAME>"
+zenml_ingress_host             = "zenml.<DOMAIN_NAME>"
+zenml_default_password         = "<DEFAULT_PASSWORD>"
