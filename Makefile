@@ -6,9 +6,12 @@ default:
 	@echo "  azure-terraform-apply       to deploy resources on Azure"
 	@echo "  azure-terraform-destroy     to destroy all resources on Azure"
 
-COLOR_GREEN='\033[0;31m'
-COLOR_RED='\033[0;32m'
-COLOR_NONE='\033[0m'
+guard-%:
+	@if [ -z '${${*}}' ]; then \
+		echo 'Environment variable $* not set.'; \
+		echo 'Please call the make target with $*="value".'; \
+		exit 1; \
+	fi
 
 azure-login:
 	docker container run \
@@ -91,13 +94,6 @@ zenml-register-secrets-manager:
 
 zenml-register-artifact-store:
 	bash $(shell pwd)/scripts/zenml/register-artifact-store.sh
-
-guard-%:
-	@if [ -z '${${*}}' ]; then \
-		echo 'Environment variable $* not set.'; \
-		echo 'Please call the make target with $*="value".'; \
-		exit 1; \
-	fi
 
 zenml-update-chart: guard-VERSION
 	@bash $(shell pwd)/scripts/zenml/update-chart.sh $(VERSION)
