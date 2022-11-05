@@ -106,7 +106,7 @@ module "ingress-ctrl" {
   cluster_issuer_name = module.letsencrypt-certs.letsencrypt_issuer_name_production
 }
 
-module "zenml" {
+module "zenml-server" {
   source           = "./modules/zenml-server"
   default_password = var.zenml_default_password
   ingress_host     = var.zenml_ingress_host
