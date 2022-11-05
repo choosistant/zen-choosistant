@@ -25,4 +25,7 @@ echo "Copying ZenML Helm chart..."
 SRC_DIR=/tmp/zenml/zenml-$ZENML_VERSION/src/zenml/zen_server/deploy/helm
 DEST_DIR=deploy/terraform/azure/modules/zenml-server/charts/zenml
 rm -rf $DEST_DIR
+mkdir -p $DEST_DIR
 cp -rf $SRC_DIR/* $DEST_DIR
+
+echo "Done."
