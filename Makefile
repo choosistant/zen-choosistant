@@ -87,14 +87,7 @@ zenml-install-integrations:
 	@poetry run zenml integration install azure
 
 zenml-create-stack:
-	@echo "Creating ZenML stack..."
-	$(eval CURRENT_STACK_NAME := $(shell poetry run zenml stack get | grep "active stack is:" | cut -d "'" -f 2))
-	if [ "${CURRENT_STACK_NAME}" = "${ZENML_STACK_NAME}" ]; then \
-		echo "Stack already exists"; \
-	else \
-		poetry run zenml stack copy default ${ZENML_STACK_NAME}; \
-	fi
-	@poetry run zenml stack set ${ZENML_STACK_NAME}
+	bash $(shell pwd)/scripts/zenml/create-stack.sh
 
 zenml-register-secrets-manager:
 	@echo "Fetching key vault name from Azure..."
