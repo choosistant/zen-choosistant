@@ -74,9 +74,6 @@ configure-kubectl:
 	@echo "Setting default namespace to choosistant..."
 	@kubectl config set-context --current --namespace=choosistant
 
-ZENML_STACK_NAME=choosistant-azure-stack
-ZENML_SECRETS_MANAGER_NAME=choosistant-azure-secret-manager
-
 zenml-init:
 	@echo "Configure remote ZenML server..."
 	@poetry run zenml connect --url https://zenml.sheikhomar.com/
@@ -90,20 +87,7 @@ zenml-create-stack:
 	bash $(shell pwd)/scripts/zenml/create-stack.sh
 
 zenml-register-secrets-manager:
-	@echo "Fetching key vault name from Azure..."
-	@docker container run \
-		-it \
-		--rm \
-		--mount type=bind,source="$(shell pwd)/deploy/terraform/azure",target=/workspace \
-		--user $(shell id -u) \
-		-v ${HOME}/.azure:/.azure \
-		zenika/terraform-azure-cli:latest \
-		terraform output --raw zenml_stack_key_vault_name \
-		> /tmp/keyvault_name
-	$(eval KEY_VAULT_NAME := $(file < /tmp/keyvault_name))
-	@echo "Using key vault ${KEY_VAULT_NAME}"
-	@poetry run zenml secrets-manager register ${ZENML_SECRETS_MANAGER_NAME} --key_vault_name=${KEY_VAULT_NAME} -f azure
-	@poetry run zenml stack update ${ZENML_STACK_NAME} -x ${ZENML_SECRETS_MANAGER_NAME}
+	bash $(shell pwd)/scripts/zenml/register-secret-manager.sh
 
 zenml-register-artifact-store:
 	bash $(shell pwd)/scripts/zenml/register-artifact-store.sh
