@@ -78,9 +78,7 @@ configure-kubectl:
 	@kubectl config set-context --current --namespace=choosistant
 
 zenml-init:
-	@echo "Configure remote ZenML server..."
-	@poetry run zenml connect --url https://zenml.sheikhomar.com/
-	@poetry run zenml init
+	bash $(shell pwd)/scripts/zenml/init.sh
 
 zenml-install-integrations:
 	@echo "Installing ZenML integrations"
