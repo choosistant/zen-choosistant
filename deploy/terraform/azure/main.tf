@@ -118,9 +118,11 @@ module "label-studio" {
 }
 
 module "zenml-server" {
-  source           = "./modules/zenml-server"
-  default_password = var.zenml_default_password
-  ingress_host     = var.zenml_ingress_host
+  source                = "./modules/zenml-server"
+  ingress_host          = var.zenml_ingress_host
+  default_project       = var.zenml_default_project
+  default_user_login    = var.zenml_default_user_login
+  default_user_password = var.zenml_default_user_password
   depends_on = [
     module.ingress-ctrl
   ]

@@ -32,6 +32,24 @@ output "zenml_stack_storage_account_access_key" {
   sensitive = true
 }
 
+output "zenml_server_ingress_host" {
+  value = module.zenml-server.ingress_host
+}
+
+output "zenml_server_default_project" {
+  value = module.zenml-server.default_project
+}
+
+output "zenml_server_default_user_login" {
+  value     = module.zenml-server.default_user_login
+  sensitive = true
+}
+
+output "zenml_server_default_user_password" {
+  value     = module.zenml-server.default_user_password
+  sensitive = true
+}
+
 output "label_studio_ingress_host" {
   value = module.label-studio.ingress_host
 }

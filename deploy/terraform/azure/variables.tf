@@ -39,15 +39,26 @@ variable "letsencrypt_email" {
   sensitive   = true
 }
 
-variable "zenml_default_password" {
-  type        = string
-  description = "The default password for the ZenML server."
-  sensitive   = true
-}
-
 variable "zenml_ingress_host" {
   type        = string
   description = "The ingress host for the ZenML server."
+}
+
+variable "zenml_default_project" {
+  type        = string
+  description = "The default project for the ZenML server."
+}
+
+variable "zenml_default_user_login" {
+  type        = string
+  description = "The default user login for the ZenML server."
+  sensitive   = true
+}
+
+variable "zenml_default_user_password" {
+  type        = string
+  description = "The default password for the ZenML server."
+  sensitive   = true
 }
 
 variable "ingress_controller_domain_name" {

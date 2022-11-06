@@ -33,16 +33,16 @@ resource "helm_release" "zenml" {
 
   set {
     name  = "zenml.defaultProject"
-    value = "choosistant"
+    value = var.default_project
   }
 
   set {
     name  = "zenml.defaultUsername"
-    value = "choosistant"
+    value = var.default_user_login
   }
 
   set {
     name  = "zenml.defaultPassword"
-    value = var.default_password
+    value = var.default_user_password
   }
 }
