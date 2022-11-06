@@ -11,9 +11,11 @@ fullnameOverride: ""
 env:
    EXPERIMENTAL_FEATURES: 1
    LABEL_STUDIO_DISABLE_SIGNUP_WITHOUT_LINK: true
-   LABEL_STUDIO_USERNAME: # Default user name
-   LABEL_STUDIO_PASSWORD: # Default password
-   LABEL_STUDIO_USER_TOKEN: # Token at least 5 characters, will be generated if not set.
+
+default_user:
+  email:
+  password:
+  token:
 
 service:
   type: ClusterIP
