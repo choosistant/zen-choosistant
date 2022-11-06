@@ -31,3 +31,21 @@ output "zenml_stack_storage_account_access_key" {
   value     = module.zenml-stack.storage_account_access_key
   sensitive = true
 }
+
+output "label_studio_ingress_host" {
+  value = module.label-studio.ingress_host
+}
+
+output "label_studio_default_user_email" {
+  value = module.label-studio.default_user_email
+}
+
+output "label_studio_default_user_password" {
+  value     = module.label-studio.default_user_password
+  sensitive = true
+}
+
+output "label_studio_default_user_token" {
+  value     = module.label-studio.default_user_token
+  sensitive = true
+}

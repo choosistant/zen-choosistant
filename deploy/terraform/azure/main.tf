@@ -106,6 +106,17 @@ module "ingress-ctrl" {
   cluster_issuer_name = module.letsencrypt-certs.letsencrypt_issuer_name_production
 }
 
+module "label-studio" {
+  source                = "./modules/label-studio"
+  ingress_host          = var.label_studio_ingress_host
+  default_user_email    = var.label_studio_default_user_email
+  default_user_password = var.label_studio_default_user_password
+  default_user_token    = var.label_studio_default_user_token
+  depends_on = [
+    module.ingress-ctrl
+  ]
+}
+
 module "zenml-server" {
   source           = "./modules/zenml-server"
   default_password = var.zenml_default_password
