@@ -95,6 +95,9 @@ zenml-register-secrets-manager:
 zenml-register-artifact-store:
 	bash $(shell pwd)/scripts/zenml/register-artifact-store.sh
 
+zenml-register-label-studio:
+	bash $(shell pwd)/scripts/zenml/register-label-studio.sh
+
 zenml-update-chart: guard-VERSION
 	@bash $(shell pwd)/scripts/zenml/update-chart.sh $(VERSION)
 
