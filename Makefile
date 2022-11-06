@@ -96,8 +96,22 @@ zenml-register-artifact-store:
 zenml-register-label-studio:
 	bash $(shell pwd)/scripts/zenml/register-label-studio.sh
 
+zenml-up:
+	bash $(shell pwd)/scripts/zenml/init.sh
+	@echo "Installing ZenML integrations"
+	@poetry run zenml integration install azure
+
+	bash $(shell pwd)/scripts/zenml/create-stack.sh
+	bash $(shell pwd)/scripts/zenml/register-secret-manager.sh
+	bash $(shell pwd)/scripts/zenml/register-artifact-store.sh
+	bash $(shell pwd)/scripts/zenml/register-label-studio.sh
+
+	@echo "Deploying ZenML stack..."
+	@poetry run zenml stack up
+
 zenml-update-chart: guard-VERSION
 	@bash $(shell pwd)/scripts/zenml/update-chart.sh $(VERSION)
+	@echo "Make sure to run `make zenml-up` to install the new chart."
 
 dev-init:
 	@poetry env use python
