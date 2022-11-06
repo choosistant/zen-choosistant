@@ -8,7 +8,7 @@ terraform {
   required_providers {
     azurerm = {
       source  = "hashicorp/azurerm"
-      version = "~>3.28.0"
+      version = "~>3.29.1"
     }
     kubernetes = {
       source  = "hashicorp/kubernetes"
@@ -43,17 +43,6 @@ resource "azurerm_resource_group" "main" {
   name     = "${var.location_code}-${var.environment}-${var.workload}-rg-01"
   location = var.location
   tags     = local.tags
-}
-
-# Create blog storage
-module "blob-storage" {
-  source              = "./modules/blob-storage"
-  resource_group_name = azurerm_resource_group.main.name
-  location_code       = var.location_code
-  location            = var.location
-  environment         = var.environment
-  workload            = var.workload
-  tags                = local.tags
 }
 
 # Create Azure Kubernetes Service
@@ -117,11 +106,34 @@ module "ingress-ctrl" {
   cluster_issuer_name = module.letsencrypt-certs.letsencrypt_issuer_name_production
 }
 
-module "zenml" {
-  source           = "./modules/zenml-server"
-  default_password = var.zenml_default_password
-  ingress_host     = var.zenml_ingress_host
+module "label-studio" {
+  source                = "./modules/label-studio"
+  ingress_host          = var.label_studio_ingress_host
+  default_user_email    = var.label_studio_default_user_email
+  default_user_password = var.label_studio_default_user_password
+  default_user_token    = var.label_studio_default_user_token
   depends_on = [
     module.ingress-ctrl
   ]
+}
+
+module "zenml-server" {
+  source                = "./modules/zenml-server"
+  ingress_host          = var.zenml_ingress_host
+  default_project       = var.zenml_default_project
+  default_user_login    = var.zenml_default_user_login
+  default_user_password = var.zenml_default_user_password
+  depends_on = [
+    module.ingress-ctrl
+  ]
+}
+
+module "zenml-stack" {
+  source              = "./modules/zenml-stack"
+  resource_group_name = azurerm_resource_group.main.name
+  location_code       = var.location_code
+  location            = var.location
+  environment         = var.environment
+  workload            = var.workload
+  tags                = local.tags
 }

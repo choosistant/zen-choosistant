@@ -39,18 +39,51 @@ variable "letsencrypt_email" {
   sensitive   = true
 }
 
-variable "zenml_default_password" {
-  type        = string
-  description = "The default password for the ZenML server."
-  sensitive   = true
-}
-
 variable "zenml_ingress_host" {
   type        = string
   description = "The ingress host for the ZenML server."
 }
 
+variable "zenml_default_project" {
+  type        = string
+  description = "The default project for the ZenML server."
+}
+
+variable "zenml_default_user_login" {
+  type        = string
+  description = "The default user login for the ZenML server."
+  sensitive   = true
+}
+
+variable "zenml_default_user_password" {
+  type        = string
+  description = "The default password for the ZenML server."
+  sensitive   = true
+}
+
 variable "ingress_controller_domain_name" {
   type        = string
   description = "The domain name for the ingress controller."
+}
+
+variable "label_studio_ingress_host" {
+  type        = string
+  description = "The ingress host for the Label Studio server."
+}
+
+variable "label_studio_default_user_email" {
+  type        = string
+  description = "The login name of the default user."
+}
+
+variable "label_studio_default_user_password" {
+  type        = string
+  description = "The password of the default user."
+  sensitive   = true
+}
+
+variable "label_studio_default_user_token" {
+  type        = string
+  description = "The token of the default user. This is used to authenticate the user when using the Label Studio API."
+  sensitive   = true
 }
