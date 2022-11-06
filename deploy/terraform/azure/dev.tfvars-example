@@ -13,3 +13,8 @@ letsencrypt_email              = "<EMAIL>"
 ingress_controller_domain_name = "<DOMAIN_NAME>"
 zenml_ingress_host             = "zenml.<DOMAIN_NAME>"
 zenml_default_password         = "<DEFAULT_PASSWORD>"
+
+label_studio_ingress_host          = "label-studio.<DOMAIN_NAME>"
+label_studio_default_user_email    = "<EMAIL>"
+label_studio_default_user_password = "<DEFAULT_PASSWORD>"
+label_studio_default_user_token    = "<DEFAULT_TOKEN>"
