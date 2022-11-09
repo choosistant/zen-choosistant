@@ -14,11 +14,11 @@ def prepare_amazon_review_dataset() -> Output(file_paths=List[Dict[str, Any]]):
         "Appliances",
         "Arts, Crafts and Sewing",
         "Automotive",
-        # "Cell Phones and Accessories",
-        # "Clothing, Shoes and Jewelry",
-        # "Electronics",
-        # "Home and Kitchen",
-        # "Electronics",
+        "Cell Phones and Accessories",
+        "Clothing, Shoes and Jewelry",
+        "Electronics",
+        "Home and Kitchen",
+        "Electronics",
     ]
     downloader = AmazonReviewDataDownloader(
         meta_data_path="data/amazon-review-dataset.json",
