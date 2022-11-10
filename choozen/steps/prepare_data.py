@@ -35,7 +35,6 @@ def prepare_amazon_review_dataset() -> Output(examples=List[Example]):
     for file_path in file_paths:
         sampler = AmazonReviewDataSampler(
             input_path=file_path,
-            output_dir="data/sampled/amazon-reviews",
         )
         examples += sampler.sample()
 

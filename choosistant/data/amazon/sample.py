@@ -39,7 +39,7 @@ class AmazonReviewDataSampler:
     def __init__(
         self,
         input_path: str,
-        output_dir: str,
+        output_dir: str = "data/sampled/amazon-reviews",
         min_word_count: int = DEFAULT_MIN_WORD_COUNT,
         beta: float = DEFAULT_BETA,
         n_items: int = DEFAULT_NUM_ITEMS,
