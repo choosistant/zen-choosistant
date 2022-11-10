@@ -1,7 +1,6 @@
 import json
 import random
 import re
-import uuid
 
 from cmath import inf
 from pathlib import Path
@@ -48,6 +47,12 @@ class AmazonReviewDataSampler:
         random_seed: int = DEFAULT_RANDOM_SEED,
     ) -> None:
         self._input_path = Path(input_path)
+
+        # Create an ID prefix based on input file name.
+        self._id_prefix = self._input_path.stem
+        if self._id_prefix.endswith(".json"):
+            self._id_prefix = self._id_prefix[:-5]
+
         self._min_word_count = min_word_count
         if random_seed is None or random_seed == 0:
             random_seed = random.randint(1, 2**32 - 1)
@@ -73,34 +78,18 @@ class AmazonReviewDataSampler:
         """Sample a subset of the reviews."""
         df_sampled_reviews = self._perform_sampling()
 
-        examples: List[Example] = []
-        for _, row in df_sampled_reviews.iterrows():
-            example = Example(
-                id=str(uuid.uuid4()),
-                reference_id=row["asin"],
-                text=row["reviewText"],
-            )
-            examples.append(example)
-
-        return examples
+        return self._convert_to_examples(df_reviews=df_sampled_reviews)
 
     def _write_to_disk(self, df_sampled_reviews) -> List[Path]:
         """Write the sampled reviews to disk as a set of files."""
         self._output_dir.mkdir(parents=True, exist_ok=True)
-
-        # Create a name prefix based on input file name
-        name_prefix = self._input_path.stem
-        if name_prefix.endswith(".json"):
-            name_prefix = name_prefix[:-5]
 
         # Save the sampled reviews to disk
         generated_file_paths: List[Path] = []
 
         records = df_sampled_reviews.to_dict(orient="records")
         for record in records:
-            file_path = (
-                self._output_dir / f"{name_prefix}-{record['review_index']}.json"
-            )
+            file_path = self._output_dir / f"{record['id']}.json"
 
             with open(file_path, "w") as f:
                 json.dump(record, f, indent=2)
@@ -109,7 +98,7 @@ class AmazonReviewDataSampler:
             generated_file_paths.append(file_path)
 
         # Save the list of generated file paths to disk
-        gen_file_name = f"{name_prefix}-generated-files-rs{self._random_seed}.txt"
+        gen_file_name = f"{self._id_prefix}-generated-files-rs{self._random_seed}.txt"
         with open(self._output_dir / gen_file_name, "w") as f:
             f.write("\n".join([str(p.absolute()) for p in generated_file_paths]))
 
@@ -131,8 +120,8 @@ class AmazonReviewDataSampler:
 
         if self._n_items > n_filtered_items:
             msg = (
-                f"Requested number of items ({self._n_items}) is greater "
-                f"than the number of items after filtering ({n_filtered_items}). "
+                f"Requested number of items (n_items={self._n_items}) is greater "
+                f"than the number of items after filtering (n_filtered={n_filtered_items}). "
                 "We will not perform any sampling, but use all the filtered items."
             )
             print(msg)
@@ -146,6 +135,10 @@ class AmazonReviewDataSampler:
             )
 
         df_sampled_reviews = self._sample_item_reviews(df_reviews, df_sampled_items)
+
+        df_sampled_reviews["id"] = df_sampled_reviews.review_index.apply(
+            lambda x: f"{self._id_prefix}-{x}"
+        )
 
         return df_sampled_reviews
 
@@ -313,7 +306,7 @@ class AmazonReviewDataSampler:
         for _, row in df_reviews.iterrows():
             examples.append(
                 Example(
-                    id=uuid.uuid4(),
+                    id=row["id"],
                     reference_id=row["asin"],
                     text=row["reviewText"],
                 )
