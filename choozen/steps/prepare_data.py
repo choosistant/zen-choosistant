@@ -1,12 +1,14 @@
-from typing import Any, Dict, List
+from typing import List
 
 from zenml.steps import Output, step
 
+from choosistant.data import Example
 from choosistant.data.amazon.download import AmazonReviewDataDownloader
+from choosistant.data.amazon.sample import AmazonReviewDataSampler
 
 
 @step
-def prepare_amazon_review_dataset() -> Output(file_paths=List[Dict[str, Any]]):
+def prepare_amazon_review_dataset() -> Output(examples=List[Example]):
     """Prepare the Amazon Review dataset."""
     categories = [
         "Amazon Fashion",
@@ -26,8 +28,18 @@ def prepare_amazon_review_dataset() -> Output(file_paths=List[Dict[str, Any]]):
         output_dir="data/raw/amazon-reviews",
         verbose=True,
     )
-    downloader.run()
-    return [{"stuff": {"more_stuff": ""}}]
+    file_paths = downloader.run()
+
+    examples: List[Example] = []
+
+    for file_path in file_paths:
+        sampler = AmazonReviewDataSampler(
+            input_path=file_path,
+            output_dir="data/sampled/amazon-reviews",
+        )
+        examples += sampler.sample()
+
+    return examples
 
 
 # Create a step
