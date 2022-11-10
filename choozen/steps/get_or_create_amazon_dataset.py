@@ -10,8 +10,8 @@ LABEL_STUDIO_UI_CONFIG = """
     <Label value="benefit" background="green"/>
     <Label value="drawback" background="red"/>
   </Labels>
-  <Header value="Please read the review text"/>
-  <Text name="text" value="$reviewText" granularity="word"/>
+  <Header value="Please label the text below."/>
+  <Text name="text" value="$text" granularity="word"/>
 </View>
 """
 

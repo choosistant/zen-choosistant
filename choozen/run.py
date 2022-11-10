@@ -7,6 +7,7 @@ from choozen.steps import (
     get_labeled_data_step,
     get_or_create_amazon_dataset_step,
     prepare_amazon_review_dataset_step,
+    sync_to_label_studio_step,
 )
 
 
@@ -23,7 +24,7 @@ def main(pipeline: str) -> None:
         pipeline_fn = initial_data_pipeline(
             prepare_data=prepare_amazon_review_dataset_step,
             get_or_create_dataset=get_or_create_amazon_dataset_step,
-            # upload_to_label_studio=upload_to_label_studio_step,
+            sync_to_label_studio=sync_to_label_studio_step,
         )
     else:
         raise ValueError(f"Pipeline {pipeline} not found.")

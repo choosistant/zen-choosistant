@@ -38,7 +38,7 @@ def prepare_amazon_review_dataset() -> Output(examples=List[Dict[str, Any]]):
         )
         examples += sampler.sample()
 
-    return [
+    examples = [
         {
             "id": example.id,
             "reference_id": example.reference_id,
@@ -46,6 +46,8 @@ def prepare_amazon_review_dataset() -> Output(examples=List[Dict[str, Any]]):
         }
         for example in examples
     ]
+
+    return examples
 
 
 # Create a step
