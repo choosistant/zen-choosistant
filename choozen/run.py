@@ -22,6 +22,7 @@ def main(pipeline: str) -> None:
     elif pipeline in ["inital_data", "initial-data"]:
         pipeline_fn = initial_data_pipeline(
             prepare_data=prepare_amazon_review_dataset_step,
+            get_or_create_dataset=get_or_create_amazon_dataset_step,
             # upload_to_label_studio=upload_to_label_studio_step,
         )
     else:

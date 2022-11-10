@@ -1,4 +1,4 @@
-from typing import List
+from typing import Any, Dict, List
 
 from zenml.steps import Output, step
 
@@ -8,7 +8,7 @@ from choosistant.data.amazon.sample import AmazonReviewDataSampler
 
 
 @step
-def prepare_amazon_review_dataset() -> Output(examples=List[Example]):
+def prepare_amazon_review_dataset() -> Output(examples=List[Dict[str, Any]]):
     """Prepare the Amazon Review dataset."""
     categories = [
         "Amazon Fashion",
@@ -38,7 +38,14 @@ def prepare_amazon_review_dataset() -> Output(examples=List[Example]):
         )
         examples += sampler.sample()
 
-    return examples
+    return [
+        {
+            "id": example.id,
+            "reference_id": example.reference_id,
+            "text": example.text,
+        }
+        for example in examples
+    ]
 
 
 # Create a step
