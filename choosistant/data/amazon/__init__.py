@@ -22,9 +22,9 @@ def parse_label_studio_exported_item(
             example.annotations.append(
                 AnnotatedSegment(
                     label=vals["labels"][0],
-                    segment_start=vals["start"],
-                    segment_end=vals["end"],
-                    segment=vals["text"],
+                    start=vals["start"],
+                    end=vals["end"],
+                    text=vals["text"],
                 )
             )
     return example
