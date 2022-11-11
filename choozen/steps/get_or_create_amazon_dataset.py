@@ -6,12 +6,22 @@ from zenml.integrations.label_studio.steps.label_studio_standard_steps import (
 
 LABEL_STUDIO_UI_CONFIG = """
 <View>
+  <View style="margin:0;padding:0;">
+    <HyperText name="intro">
+      <p style="font-family: Helvetica, sans-serif;margin:0;padding:0;">
+        Please read the following text and
+        highlight phrases where the benefits and drawbacks.</p>
+    </HyperText>
+  </View>
+
   <Labels name="pros_and_cons" toName="text" showInline="true">
     <Label value="benefit" background="green"/>
     <Label value="drawback" background="red"/>
   </Labels>
-  <Header value="Please label the text below."/>
-  <Text name="text" value="$text" granularity="word"/>
+
+  <View style="border: 1px solid #CCC;border-radius: 5px;padding: 10px">
+    <Text name="text" value="$text" granularity="word"/>
+  </View>
 </View>
 """
 
