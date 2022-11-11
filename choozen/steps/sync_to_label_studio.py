@@ -130,7 +130,7 @@ def sync_to_label_studio(
     azure_secret = get_azure_secret(context)
 
     label_studio_dir_name = "label-studio-storage"
-    label_studio_full_path = f"{artifact_store.path}/{label_studio_dir_name}/"
+    label_studio_full_path = f"{artifact_store.path}/{label_studio_dir_name}"
 
     upload_examples_to_artifact_store(
         examples=examples,
