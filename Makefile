@@ -114,9 +114,7 @@ zenml-update-chart: guard-VERSION
 	@echo "Make sure to run `make zenml-up` to install the new chart."
 
 dev-init:
-	@poetry env use python
-	@poetry install
-	@poetry run pre-commit install
+	@bash $(shell pwd)/scripts/dev/init.sh
 
 dev-precommit:
 	poetry run pre-commit run --all-files
